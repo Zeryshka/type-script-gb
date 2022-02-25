@@ -1,19 +1,8 @@
-// import { renderSearchFormBlock } from './search-form.js'
-// import { renderSearchStubBlock } from './search-results.js'
-// import { renderUserBlock } from './user.js'
-// import { renderToast } from './lib.js'
-import { getTodosByCount } from './todos.js'
-import { todoInterface } from './interfaces.js';
+import { cloneDate, addDays, FlatRentSdk } from './flat-rent-sdk/flat-rent-sdk'
 
-window.addEventListener('DOMContentLoaded', async () => {
-  const todos: todoInterface[] = await getTodosByCount(5);
-  console.log(todos);
+cloneDate(new Date());
+addDays(new Date(), 5);
 
-  // renderUserBlock('Maxim Sorokin', './img/avatar.png', 1)
-  // renderSearchFormBlock()
-  // renderSearchStubBlock()
-  // renderToast(
-  //   { text: 'Это пример уведомления. Используйте его при необходимости', type: 'success' },
-  //   { name: 'Понял', handler: () => { console.log('Уведомление закрыто') } }
-  // )
-})
+const flat = new FlatRentSdk();
+
+flat.get(1337);
