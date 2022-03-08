@@ -9,7 +9,7 @@ export class Collection<V, K extends number | string | symbol = string> {
     this.items[key] = value
   }
 
-  public get(key: K): V {
+  public get(key: K): V | undefined {
     return this.items[key]
   }
 

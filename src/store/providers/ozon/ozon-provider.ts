@@ -53,7 +53,7 @@ export class OzonProvider implements Provider {
    */
   private convertFilterToQueryString(filter: SearchFilter): string {
     return `search=${filter.name}` +
-      `&author=${filter.author.firstName} ${filter.author.lastName}`
+      `&author=${filter?.author?.firstName} ${filter?.author?.lastName}`
   }
 
   /**

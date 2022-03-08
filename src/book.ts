@@ -7,7 +7,7 @@ export class Book extends Product implements Ratingable {
   private static itemsForIncreasedDiscount = 3
   private static sumForIncreasedDiscount = 3000
   private reviews: Review[]
-  private _rating: number
+  private _rating: number | null
 
   constructor (
     public name: string,
@@ -18,6 +18,8 @@ export class Book extends Product implements Ratingable {
   ) {
     super(price)
 
+    this._rating = null;
+
     if (reviews) {
       this.reviews = reviews
     } else {
@@ -27,8 +29,8 @@ export class Book extends Product implements Ratingable {
     this.calculateRating()
   }
 
-  public get rating(): number {
-    return this._rating
+  public get rating(): number | null {
+    return this?._rating ?? null
   }
 
   public getProductDescription(): string {

@@ -16,7 +16,9 @@ export function serialize(value: unknown) {
 
   // остальные типы будем просто
   // приводить к строке
-  return value.toString()
+  if (typeof value === 'string') {
+    return value.toString()
+  }
 }
 
 export function getGenreName(genre: Genre) {
@@ -25,7 +27,7 @@ export function getGenreName(genre: Genre) {
     [Genre.Fantasy]: 'fantasy',
     [Genre.Horror]: 'horror'
   }
-  
+
   return genreMapping[genre]
 }
 
@@ -71,7 +73,7 @@ export function addToShelf(book: Book, shelfName = 'favorite'): void {
   // здесь логика добавления книги на полку
 }
 
-export function addToShelfBunch(shelfName, ...books: Book[]): void {
+export function addToShelfBunch(shelfName: string, ...books: Book[]): void {
   books.forEach((book) => {
     addToShelf(book, shelfName)
   })
@@ -98,10 +100,10 @@ export function buyRequest(book: Book) {
 
 export function buy(book: Book, callback: BuyCallback): void {
   buyRequest(book)
-  .then((id) => {
-    callback(null, id)
-  })
-  .catch((error) => {
-    callback(error)
-  })
+    .then((id) => {
+      callback(undefined, id)
+    })
+    .catch((error) => {
+      callback(error)
+    })
 }

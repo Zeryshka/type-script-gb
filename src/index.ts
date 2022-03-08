@@ -32,7 +32,7 @@ Promise.all([
   bukvoed.find(filter)
 ]).then((results) => {
   // мерджим все результаты в один
-  const allResults: Book[] = [].concat(results[0], results[1])
+  const allResults: Book[] = results[0].concat(results[1])
   // работаем с ними как с единым целым
   allResults.sort(sortByPrice)
 })
