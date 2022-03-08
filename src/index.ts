@@ -1,55 +1,38 @@
-abstract class MyGraphicsPrimitive2D {
-    protected x: number
-    protected y: number
+import { Author } from './store/domain/author.js'
+import { Book } from './store/domain/book.js'
+import { Genre } from './store/domain/genre.js'
+import { SearchFilter } from './store/domain/search-filter.js'
+import { BukvoedProvider } from './store/providers/bukvoed/bukvoed-provider.js'
+import { OzonProvider } from './store/providers/ozon/ozon-provider.js'
 
-    constructor(x: number, y: number) {
-        this.x = x;
-        this.y = y;
-    }
+const ozon = new OzonProvider()
+const bukvoed = new BukvoedProvider()
 
-    shiftPrimitive(x: number, y: number): void {
-        this.x += x;
-        this.y += y;
-    }
+// создаём общий фильтр для всех источников
+const filter: SearchFilter = {
+  name: 'it',
+  genre: Genre.Horror,
+  author: new Author('Stephen', 'King')
 }
 
-abstract class MyAreaPrimitive2D extends MyGraphicsPrimitive2D {
-    figureArea(): number {
-        return this.x * this.y;
-    }
+// описываем логику сортировки по цене
+function sortByPrice(one: Book, two: Book) {
+  if (one.price > two.price) {
+    return 1
+  } else if (one.price < two.price) {
+    return -1
+  } else {
+    return 0
+  }
 }
 
-class MyCircle extends MyAreaPrimitive2D {
-    circleCenter: number
-    radius: number
-
-    constructor(x: number, y: number, circleCenter: number, radius: number) {
-        super(x, y);
-        this.circleCenter = circleCenter
-        this.radius = radius
-    }
-}
-
-const circle = new MyCircle(10, 20, 5, 10); // экземпляр класса MyCircle
-console.log('MyCircle');
-console.log(circle.figureArea()); // 200
-circle.shiftPrimitive(1, 1); // сдвигаем X и Y на +1
-console.log(circle.figureArea()); // 231
-
-class MyRectangle extends MyAreaPrimitive2D {
-    width: number
-    height: number
-
-    constructor(x: number, y: number, width: number, height: number) {
-        super(x, y);
-        this.width = width
-        this.height = height
-    }
-}
-
-const rectangle = new MyRectangle(10, 20, 5, 10); // экземпляр класса MyRectangle
-console.log('MyRectangle');
-console.log(rectangle.figureArea()); // 200
-rectangle.shiftPrimitive(1, 1); // сдвигаем X и Y на +1
-console.log(rectangle.figureArea()); // 231
-
+// запрашиваем разные источники по единому протоколу
+Promise.all([
+  ozon.find(filter),
+  bukvoed.find(filter)
+]).then((results) => {
+  // мерджим все результаты в один
+  const allResults: Book[] = [].concat(results[0], results[1])
+  // работаем с ними как с единым целым
+  allResults.sort(sortByPrice)
+})
